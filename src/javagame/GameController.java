@@ -92,7 +92,7 @@ public class GameController {
         return userKeys;
     }
     
-    public boolean checkPosition(int xPos, int yPos) {
+    private boolean checkPosition(int xPos, int yPos) {
 
         //end game checker
         if (xPos == 9 && yPos == 9) {
