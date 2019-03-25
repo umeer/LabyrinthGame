@@ -121,7 +121,7 @@ public class GameUI extends JPanel implements KeyListener, ActionListener, Obser
         this.repaint();
     }
 
-    public void paintGameMap(Map gameMap) { //aggiorna la gui quando necessario(modifica filtri orari o giorni)
+    private void paintGameMap(Map gameMap) { //aggiorna la gui quando necessario(modifica filtri orari o giorni)
         JPanel pannello = new JPanel(new GridLayout(0, 10, -25, 0));
         try {
             pannello.setBackground(Color.BLACK);

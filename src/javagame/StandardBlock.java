@@ -10,8 +10,7 @@ public class StandardBlock extends JButton {
 
     private String[] imagesLocation = new String[]{"images/block/empty.png", "images/block/user.png", "images/block/key.png", "images/block/door.png", "images/block/wall.png", "images/block/end.png", "images/block/extra.png"};
 
-    public StandardBlock(BlockType typeOfBlock) throws IOException {
- 
+    public StandardBlock(BlockType typeOfBlock) throws IOException { 
         setCover(typeOfBlock);
         this.setBorderPainted(false);
         this.setContentAreaFilled(false);

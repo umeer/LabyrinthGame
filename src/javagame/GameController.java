@@ -56,7 +56,7 @@ public class GameController extends Observable {
         saveGame();
     }
 
-    public void saveGame() {
+    public void saveGame() { //this is left public only because it is used in the JUnit Testing
         gameMapSaved = new Map();
         for (int i = 0; i < 10; i++) {
             gameMapSaved.blockPosition[i] = Arrays.copyOf(gameMap.blockPosition[i], gameMap.blockPosition[i].length);
