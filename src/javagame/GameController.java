@@ -75,16 +75,15 @@ public class GameController extends Observable {
     }
 
     public void mapMutationAlgorithm() {
-        int oriVariation = rand.nextInt(5);
+        int oriVariation = rand.nextInt(10);
         int variation = oriVariation;
         ArrayList<Integer> valuesLogs = new ArrayList<Integer>();
-
-        
+      
         for (int i = 0; i < variation; i++) {
 
             int xPos = rand.nextInt(8) + 1;
             int yPos = rand.nextInt(8) + 1;
-            int size = rand.nextInt(16) + 5;
+            int size = rand.nextInt(5) + 5;
 
             if (gameMap.blockPosition[xPos][yPos] == BlockType.KEY.ordinal()) {
                 variation++;

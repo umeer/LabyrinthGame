@@ -1,0 +1,6 @@
+GameConsole$BlockType
+javagame.BlockType
+javagame.SystemMessage
+BlockType
+javagame.GameConsole
+GameConsole
