@@ -1,21 +1,24 @@
+package javagame;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.IOException;
-import javax.swing.JButton;
+import java.util.Observable;
+import java.util.Observer;
+import javax.swing.*;
 
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 
-public class GameUI extends JPanel implements KeyListener, ActionListener {
+public class GameUI extends JPanel implements KeyListener, ActionListener, Observer {
 
     private Component messageFrame;
     private GameController controller;
@@ -23,6 +26,63 @@ public class GameUI extends JPanel implements KeyListener, ActionListener {
 
     public GameUI() {
         this.controller = new GameController();
+        controller.addObserver(this);
+
+        loadGameStartMenu();
+    }
+
+    private void loadGameStartMenu() {
+        this.removeAll();
+
+        JPanel mainScreen = new JPanel();
+        mainScreen.setLayout(new GridBagLayout());
+        mainScreen.setBorder(BorderFactory.createEmptyBorder(10, 50, 50, 50));
+        this.setLayout(new BorderLayout());
+        this.add(mainScreen, BorderLayout.CENTER);
+
+        GridBagConstraints c = new GridBagConstraints();
+        c.fill = GridBagConstraints.VERTICAL;
+
+        JLabel label = new JLabel("<html><p style=\"font-size:60px\">Barricade Game</font></html>", SwingConstants.CENTER);
+        label.setFont(new Font("Serif", Font.BOLD, 25));
+        label.setForeground(Color.BLACK);
+        c.fill = GridBagConstraints.VERTICAL;
+        c.ipady = 40;      //make this component tall
+        c.weightx = 3;
+        c.gridwidth = 3;
+        c.gridx = 0;
+        c.gridy = 0;
+        mainScreen.add(label, c);
+
+        ImageIcon immagine = new ImageIcon("images/block/user.png");
+        JLabel image = new JLabel(new ImageIcon(immagine.getImage().getScaledInstance(350, 350, java.awt.Image.SCALE_SMOOTH)));
+        c.fill = GridBagConstraints.VERTICAL;
+        c.weightx = 0.5;
+        c.gridx = 0;
+        c.gridy = 1;
+        mainScreen.add(image, c);
+
+        JButton startButton = new JButton();
+        startButton.setSize(20, 70);
+        startButton.setText("Start");
+        startButton.setAlignmentY(Component.CENTER_ALIGNMENT);
+        c.fill = GridBagConstraints.VERTICAL;
+        c.weightx = 0.5;
+        c.gridx = 0;
+        c.gridy = 2;
+        mainScreen.add(startButton, c);
+        startButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                loadGameInterface();
+            }
+        });
+
+        this.revalidate();
+        this.repaint();
+    }
+
+    private void loadGameInterface() {
+        this.removeAll();
 
         this.setLayout(new GridLayout(1, 2, 10, 10));
         mainPanel = new JPanel();
@@ -39,11 +99,13 @@ public class GameUI extends JPanel implements KeyListener, ActionListener {
             }
         });
 
-        setFocusable(true);
-        this.addKeyListener(this);
-
         controller.gameInitialization();
         paintGameMap(controller.getGameMap());
+
+        this.setFocusable(true);
+        this.addKeyListener(this);
+        this.revalidate();
+        this.repaint();
     }
 
     public void paintGameMap(Map gameMap) { //aggiorna la gui quando necessario(modifica filtri orari o giorni)
@@ -81,7 +143,13 @@ public class GameUI extends JPanel implements KeyListener, ActionListener {
             JOptionPane.showMessageDialog(messageFrame, "Errore while loading images", "Error!!!", JOptionPane.WARNING_MESSAGE);
         }
 
-        JLabel label = new JLabel("Keys collected: " + controller.getUserKeys(), JLabel.CENTER);
+        JLabel label;
+        if (controller.getUserKeys() == 0) {
+            label = new JLabel("No Key Collected", JLabel.CENTER);
+
+        } else {
+            label = new JLabel("Key Pin: " + controller.getUserKeys(), JLabel.CENTER);
+        }
         label.setFont(new Font("Serif", Font.BOLD, 25));
         label.setPreferredSize(new Dimension(250, 300));
         label.setForeground(Color.BLACK);
@@ -92,6 +160,7 @@ public class GameUI extends JPanel implements KeyListener, ActionListener {
         mainPanel.revalidate();
         mainPanel.repaint();
         this.requestFocusInWindow();
+        this.setFocusable(true);
     }
 
     @Override
@@ -106,13 +175,57 @@ public class GameUI extends JPanel implements KeyListener, ActionListener {
 
     @Override
     public void keyReleased(KeyEvent e) {
-        controller.moveCharachter(e.getKeyCode());
-
-        paintGameMap(controller.getGameMap());
+        if (controller.moveCharachter(e.getKeyCode())) {
+            paintGameMap(controller.getGameMap());
+        }
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
+    }
+
+    @Override
+    public void update(Observable o, Object arg) {
+        SystemMessage systemMessage = (SystemMessage) arg;
+        switch (systemMessage) {
+
+            case NULL: {
+                break;
+            }
+            case GAME_COMPLETED: {
+                gameCompletedNotificationPopup("Congratulations you found the exit!");
+                break;
+            }
+            case GAME_COMPLETED_NO_EXTRA: {
+                gameCompletedNotificationPopup("Congratulations you found the exit but you left the extra inside");
+                break;
+            }
+            case WRONG_KEY: {
+                if (controller.getUserKeys() == 0) {
+                    JOptionPane.showMessageDialog(messageFrame, "Pick up a key to open the door!", "Game Message:", JOptionPane.WARNING_MESSAGE);
+                } else {
+                    JOptionPane.showMessageDialog(messageFrame, "Wrong key!", "Game Message:", JOptionPane.WARNING_MESSAGE);
+                }
+                break;
+            }
+            default: {
+            }
+        }
+    }
+
+    private void gameCompletedNotificationPopup(String message) {
+        Object[] options1 = {"Return To Start Page", "Exit"};
+        JPanel panel = new JPanel();
+        panel.add(new JLabel(message));
+        int result = JOptionPane.showOptionDialog(messageFrame, panel, "Game Message:",
+                JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE,
+                null, options1, null);
+        if (result == JOptionPane.YES_OPTION) {
+            loadGameStartMenu();
+            this.removeKeyListener(this);
+        } else {
+            System.exit(0);
+        }
     }
 
 }

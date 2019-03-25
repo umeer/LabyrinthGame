@@ -1,3 +1,4 @@
+package javagame;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
@@ -27,9 +28,22 @@ public class GameConsole extends JFrame{
         
     }
         
-    
-    
+}
+   enum BlockType {
 
-    
+        EMPTY,
+        USER,
+        KEY,
+        DOOR,
+        WALL,
+        END,
+        EXTRA // if the extra is present on the map, before finishing you need to collect it
+  }
 
+ enum SystemMessage {
+
+    NULL,
+    GAME_COMPLETED,
+    GAME_COMPLETED_NO_EXTRA,
+    WRONG_KEY
 }

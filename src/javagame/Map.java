@@ -1,3 +1,4 @@
+package javagame;
 
 public class Map {
     public int[][] blockPosition, blockValues; // index used here reffer to the enum BlockType

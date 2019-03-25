@@ -1,3 +1,4 @@
+package javagame;
 
 import java.awt.BorderLayout;
 import java.io.IOException;

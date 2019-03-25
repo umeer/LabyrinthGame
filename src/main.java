@@ -1,3 +1,6 @@
+
+import javagame.GameConsole;
+
 public class main {
    
     public static void main(String[] args) {
@@ -15,13 +18,3 @@ public class main {
     }
 }
 
- enum BlockType {
-
-        EMPTY,
-        USER,
-        KEY,
-        DOOR,
-        WALL,
-        END,
-        EXTRA // if the extra is present on the map, before finishing you need to collect it
-  }
