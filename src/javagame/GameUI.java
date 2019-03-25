@@ -17,12 +17,11 @@ import java.util.Observable;
 import java.util.Observer;
 import javax.swing.*;
 
-
 public class GameUI extends JPanel implements KeyListener, ActionListener, Observer {
 
     private Component messageFrame;
     private GameController controller;
-    private JPanel mainPanel;
+    private JPanel MapPanel;
 
     public GameUI() {
         this.controller = new GameController();
@@ -34,10 +33,10 @@ public class GameUI extends JPanel implements KeyListener, ActionListener, Obser
     private void loadGameStartMenu() {
         this.removeAll();
 
+        this.setLayout(new BorderLayout());
         JPanel mainScreen = new JPanel();
         mainScreen.setLayout(new GridBagLayout());
         mainScreen.setBorder(BorderFactory.createEmptyBorder(10, 50, 50, 50));
-        this.setLayout(new BorderLayout());
         this.add(mainScreen, BorderLayout.CENTER);
 
         GridBagConstraints c = new GridBagConstraints();
@@ -63,7 +62,7 @@ public class GameUI extends JPanel implements KeyListener, ActionListener, Obser
         mainScreen.add(image, c);
 
         JButton startButton = new JButton();
-        startButton.setSize(20, 70);
+        startButton.setPreferredSize(new Dimension(300, 50));
         startButton.setText("Start");
         startButton.setAlignmentY(Component.CENTER_ALIGNMENT);
         c.fill = GridBagConstraints.VERTICAL;
@@ -84,20 +83,34 @@ public class GameUI extends JPanel implements KeyListener, ActionListener, Obser
     private void loadGameInterface() {
         this.removeAll();
 
-        this.setLayout(new GridLayout(1, 2, 10, 10));
-        mainPanel = new JPanel();
-        this.add(mainPanel);
+        this.setLayout(new BorderLayout());
+        MapPanel = new JPanel();
+        this.add(MapPanel, BorderLayout.CENTER);
 
+        JPanel controllButtonsPanel = new JPanel(new BorderLayout());
+        controllButtonsPanel.setBorder(BorderFactory.createEmptyBorder(0, 100, 75, 100));
         JButton restartButton = new JButton();
-        restartButton.setText("Restart");
-        this.add(restartButton);
+        restartButton.setPreferredSize(new Dimension(300, 50));
+        restartButton.setText("Restart Game");
+        controllButtonsPanel.add(restartButton, BorderLayout.WEST);
         restartButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                controller.reloadGame();
+                paintGameMap(controller.getGameMap());
+            }
+        });
+        JButton newMapButton = new JButton();
+        newMapButton.setPreferredSize(new Dimension(300, 50));
+        newMapButton.setText("Generate New Random Map");
+        controllButtonsPanel.add(newMapButton, BorderLayout.EAST);
+        newMapButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 controller.gameInitialization();
                 controller.mapMutationAlgorithm();
                 paintGameMap(controller.getGameMap());
             }
         });
+        this.add(controllButtonsPanel, BorderLayout.SOUTH);
 
         controller.gameInitialization();
         paintGameMap(controller.getGameMap());
@@ -142,6 +155,8 @@ public class GameUI extends JPanel implements KeyListener, ActionListener, Obser
         } catch (IOException ex) {
             JOptionPane.showMessageDialog(messageFrame, "Errore while loading images", "Error!!!", JOptionPane.WARNING_MESSAGE);
         }
+        MapPanel.removeAll();
+        MapPanel.add(pannello);
 
         JLabel label;
         if (controller.getUserKeys() == 0) {
@@ -153,12 +168,10 @@ public class GameUI extends JPanel implements KeyListener, ActionListener, Obser
         label.setFont(new Font("Serif", Font.BOLD, 25));
         label.setPreferredSize(new Dimension(250, 300));
         label.setForeground(Color.BLACK);
+        MapPanel.add(label);
 
-        mainPanel.removeAll();
-        mainPanel.add(pannello);
-        mainPanel.add(label);
-        mainPanel.revalidate();
-        mainPanel.repaint();
+        MapPanel.revalidate();
+        MapPanel.repaint();
         this.requestFocusInWindow();
         this.setFocusable(true);
     }

@@ -7,4 +7,8 @@ public class Map {
         this.blockPosition = blockPosition;
         this.blockValues = blockValues;
     }
+    public Map() {
+        this.blockPosition = new int[10][10];
+        this.blockValues = new int[10][10];
+    }
 }

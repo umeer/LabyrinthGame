@@ -2,6 +2,8 @@ package javagame;
 
 import java.awt.Component;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Observable;
 import java.util.Random;
 import javax.swing.JLabel;
@@ -11,9 +13,8 @@ import javax.swing.JTextField;
 
 public class GameController extends Observable {
 
-    private Component messageFrame;
-    private Map gameMap;
-    private int userKeys;
+    private Map gameMap, gameMapSaved;
+    private int userKey, userKeySaved;
     private Random rand;
 
     public GameController() {
@@ -21,7 +22,7 @@ public class GameController extends Observable {
     }
 
     public void gameInitialization() {
-        userKeys = 0;
+        userKey = 0;
 
         //map creation happens here, and this is the fist basic map
         int[][] blockPosition, blockValues;
@@ -52,12 +53,33 @@ public class GameController extends Observable {
         };
 
         gameMap = new Map(blockPosition, blockValues);
+        saveGame();
+    }
+
+    public void saveGame() {
+        gameMapSaved = new Map();
+        for (int i = 0; i < 10; i++) {
+            gameMapSaved.blockPosition[i] = Arrays.copyOf(gameMap.blockPosition[i], gameMap.blockPosition[i].length);
+            gameMapSaved.blockValues[i] = Arrays.copyOf(gameMap.blockValues[i], gameMap.blockValues[i].length);
+        }
+        userKeySaved = userKey;
+    }
+
+    public void reloadGame() {
+         gameMap = new Map();
+        for (int i = 0; i < 10; i++) {
+            gameMap.blockPosition[i] = Arrays.copyOf(gameMapSaved.blockPosition[i], gameMapSaved.blockPosition[i].length);
+            gameMap.blockValues[i] = Arrays.copyOf(gameMapSaved.blockValues[i], gameMapSaved.blockValues[i].length);
+        }
+        userKey = userKeySaved;
     }
 
     public void mapMutationAlgorithm() {
         int oriVariation = rand.nextInt(5);
         int variation = oriVariation;
+        ArrayList<Integer> valuesLogs = new ArrayList<Integer>();
 
+        
         for (int i = 0; i < variation; i++) {
 
             int xPos = rand.nextInt(8) + 1;
@@ -69,6 +91,7 @@ public class GameController extends Observable {
             } else {
                 gameMap.blockPosition[xPos][yPos] = BlockType.KEY.ordinal();
                 gameMap.blockValues[xPos][yPos] = size;
+                valuesLogs.add(size);
             }
         }
 
@@ -78,15 +101,16 @@ public class GameController extends Observable {
 
             int xPos = rand.nextInt(8) + 1;
             int yPos = rand.nextInt(8) + 1;
-            int size = rand.nextInt(16) + 5;
 
             if (gameMap.blockPosition[xPos][yPos] == BlockType.KEY.ordinal()) {
                 variation++;
             } else {
                 gameMap.blockPosition[xPos][yPos] = BlockType.DOOR.ordinal();
-                gameMap.blockValues[xPos][yPos] = size;
+                gameMap.blockValues[xPos][yPos] = valuesLogs.get(0);
+                valuesLogs.remove(0);
             }
         }
+        saveGame();
     }
 
     public Map getGameMap() {
@@ -94,10 +118,9 @@ public class GameController extends Observable {
     }
 
     public int getUserKeys() {
-        return userKeys;
+        return userKey;
     }
 
-    
     public boolean moveCharachter(int direction) {
 
         int i = 0, j = 0;
@@ -181,9 +204,9 @@ public class GameController extends Observable {
                 return false;
             } else if (gameMap.blockPosition[xPos][yPos] == BlockType.KEY.ordinal()) {
                 playSound();
-                userKeys = gameMap.blockValues[xPos][yPos];
+                userKey = gameMap.blockValues[xPos][yPos];
             } else if (gameMap.blockPosition[xPos][yPos] == BlockType.DOOR.ordinal()) {
-                if (gameMap.blockValues[xPos][yPos] == userKeys) {
+                if (gameMap.blockValues[xPos][yPos] == userKey) {
                     playSound();
                     //userKeys = userKeys - gameMap.blockValues[xPos][yPos];
                 } else {

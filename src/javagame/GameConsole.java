@@ -18,7 +18,7 @@ public class GameConsole extends JFrame{
     public void draw() {
         this.setTitle("Game");
         this.setDefaultCloseOperation(this.DISPOSE_ON_CLOSE);
-        this.setBounds(100, 100, 1200, 850);
+        this.setBounds(100, 100, 900, 850);
         ImageIcon icon = new ImageIcon("images/icon.PNG");
         setIconImage(icon.getImage());
 
