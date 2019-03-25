@@ -1,0 +1,3 @@
+javagame.BlockType
+javagame.SystemMessage
+javagame.GameConsole

@@ -43,7 +43,7 @@ public class GameUI extends JPanel implements KeyListener, ActionListener, Obser
         c.fill = GridBagConstraints.VERTICAL;
 
         JLabel label = new JLabel("<html><p style=\"font-size:60px\">Barricade Game</font></html>", SwingConstants.CENTER);
-        label.setFont(new Font("Serif", Font.BOLD, 25));
+        label.setFont(new Font("Serif", Font.PLAIN, 25));
         label.setForeground(Color.BLACK);
         c.fill = GridBagConstraints.VERTICAL;
         c.ipady = 40;      //make this component tall
@@ -63,6 +63,7 @@ public class GameUI extends JPanel implements KeyListener, ActionListener, Obser
 
         JButton startButton = new JButton();
         startButton.setPreferredSize(new Dimension(300, 50));
+        startButton.setFont(new Font("Arial", Font.BOLD, 40));
         startButton.setText("Start");
         startButton.setAlignmentY(Component.CENTER_ALIGNMENT);
         c.fill = GridBagConstraints.VERTICAL;
@@ -198,7 +199,7 @@ public class GameUI extends JPanel implements KeyListener, ActionListener, Obser
     }
 
     @Override
-    public void update(Observable o, Object arg) {
+    public void update(Observable o, Object arg) {//This is an observer of events that happens in the controller. Events like the end of the game.
         SystemMessage systemMessage = (SystemMessage) arg;
         switch (systemMessage) {
 
@@ -210,7 +211,7 @@ public class GameUI extends JPanel implements KeyListener, ActionListener, Obser
                 break;
             }
             case GAME_COMPLETED_NO_EXTRA: {
-                gameCompletedNotificationPopup("Congratulations you found the exit but you left the extra inside");
+                gameCompletedNotificationPopup("Congratulations you found the exit but you left the extra inside!");
                 break;
             }
             case WRONG_KEY: {

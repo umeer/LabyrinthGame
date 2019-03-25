@@ -6,10 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Observable;
 import java.util.Random;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
+
 
 public class GameController extends Observable {
 
@@ -24,7 +21,7 @@ public class GameController extends Observable {
     public void gameInitialization() {
         userKey = 0;
 
-        //map creation happens here, and this is the fist basic map
+        //map creation happens here, and this is the fist default map
         int[][] blockPosition, blockValues;
         blockPosition = new int[][]{
             {BlockType.USER.ordinal(), 0, 0, 0, 0, 0, 0, 0, 0, 4},
@@ -199,12 +196,12 @@ public class GameController extends Observable {
         //boundary limiter
         if ((xPos >= 0 && xPos <= 9) && (yPos >= 0 && yPos <= 9)) {
 
-            if (gameMap.blockPosition[xPos][yPos] == BlockType.WALL.ordinal()) {
+            if (gameMap.blockPosition[xPos][yPos] == BlockType.WALL.ordinal()) { //hit a wall
                 return false;
-            } else if (gameMap.blockPosition[xPos][yPos] == BlockType.KEY.ordinal()) {
+            } else if (gameMap.blockPosition[xPos][yPos] == BlockType.KEY.ordinal()) { //hit a key
                 playSound();
                 userKey = gameMap.blockValues[xPos][yPos];
-            } else if (gameMap.blockPosition[xPos][yPos] == BlockType.DOOR.ordinal()) {
+            } else if (gameMap.blockPosition[xPos][yPos] == BlockType.DOOR.ordinal()) { //hit a door
                 if (gameMap.blockValues[xPos][yPos] == userKey) {
                     playSound();
                     //userKeys = userKeys - gameMap.blockValues[xPos][yPos];
