@@ -4,10 +4,12 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/C:/Users/Yoga/Desktop/Development/Java%20Game/Java-Game/test/javagame/GameTests.java</file>
+            <file>file:/C:/Users/Yoga/Desktop/Development/Java%20Game/Java-Game/src/javagame/NumericBlock.java</file>
             <file>file:/C:/Users/Yoga/Desktop/Development/Java%20Game/Java-Game/src/javagame/GameConsole.java</file>
             <file>file:/C:/Users/Yoga/Desktop/Development/Java%20Game/Java-Game/src/javagame/Map.java</file>
             <file>file:/C:/Users/Yoga/Desktop/Development/Java%20Game/Java-Game/src/javagame/GameController.java</file>
             <file>file:/C:/Users/Yoga/Desktop/Development/Java%20Game/Java-Game/src/javagame/GameUI.java</file>
+            <file>file:/C:/Users/Yoga/Desktop/Development/Java%20Game/Java-Game/src/javagame/StandardBlock.java</file>
         </group>
     </open-files>
 </project-private>
