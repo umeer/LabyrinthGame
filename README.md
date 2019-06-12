@@ -5,5 +5,5 @@ The game is a labyrinth puzzle game where the user (can be controlled with the k
 
 
 
-## Game's Screenshot
+## Game Screenshot
 ![alt text](https://raw.githubusercontent.com/umeer/Java-Game/master/Game_HUD.JPG)
